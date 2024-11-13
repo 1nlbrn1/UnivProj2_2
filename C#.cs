@@ -289,4 +289,3 @@ namespace UnivLabProj2_2 {
         }
     }
 }
-ы
