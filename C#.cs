@@ -12,13 +12,22 @@ namespace UnivLabProj2_2 {
                     ok = false;
             return ok;
         }
+        static public bool isokinputbyte(string s, byte left, byte right) {
+            bool ok;
+            byte a;
+            ok = byte.TryParse(s, out a);
+            if(ok)
+                if(a < left || a > right)
+                    ok = false;
+            return ok;
+        }
 
     }
     public class Time {
         byte hours;
         byte minutes;
-        byte Hours { get; set; }
-        byte Minutes { get; set; }
+        byte Hours { get { return hours; } set { hours = value; } }
+        byte Minutes { get { return minutes; } set { minutes = value; } }
         public Time() {
             this.hours = 0;
             this.minutes = 0;
@@ -32,7 +41,16 @@ namespace UnivLabProj2_2 {
             this.minutes = t.minutes;
         }
         public new string ToString() {
-            return hours + ":" + minutes;
+            string str = "";
+            if(hours < 10) {
+                str += "0";
+            }
+            str += hours +":";
+            if(minutes < 10) {
+                str += "0";
+            }
+            str += minutes;
+            return str;
         }
         public static Time operator -(Time t, Time t1) {
             int hours = t.hours;
@@ -48,21 +66,6 @@ namespace UnivLabProj2_2 {
             }
             return new Time(Convert.ToByte(hours), Convert.ToByte(minutes));
         }
-        /*
-        public static Time operator -(Time t, byte minutes1) { // доработать
-            int hours = t.hours;
-            int minutes = t.minutes;
-            minutes -= minutes1;
-            if(minutes < 0) {
-                hours += minutes/60 - 1;
-                minutes = 60 + minutes%60;
-            }
-            if(hours < 0) {
-                hours = 24 + hours;
-            }
-            return new Time(Convert.ToByte(hours), Convert.ToByte(minutes));
-        }
-        */
         public static Time operator --(Time t) {
             int hours = t.hours;
             int minutes = t.minutes;
@@ -115,7 +118,6 @@ namespace UnivLabProj2_2 {
             minutes += minutes1;
             if(minutes > 59) {
                 hours += minutes / 60;
-                Console.WriteLine(minutes + " " + minutes / 60);
                 minutes %= 60;
             }
             if(hours > 23) {
@@ -126,40 +128,165 @@ namespace UnivLabProj2_2 {
     }
     class Program {
         static void Main(string[] args) {
-            Time t = new Time(12, 0);
-            Time t1 = new Time(1, 22);
-            Console.WriteLine((t - t1).ToString());
+            Time time = new Time();
+            Console.WriteLine("Time().ToString: " + time.ToString());
 
-            Time t2 = new Time(12, 0);
-            Time t3 = new Time(14, 22);
-            Console.WriteLine((t2 - t3).ToString());
+            string inp;
+            string[] spl;
+            Time time1;
+            while(true) {
+                Console.WriteLine("Input hours and minutes for Time1(hours, minutes):");
+                inp = Console.ReadLine();
+                spl = inp.Split(' ');
+                if(spl.Length == 2) {
+                    if(check.isokinputbyte(spl[0], 0, 23) && check.isokinputbyte(spl[1], 0, 59)) {
+                        time1 = new Time(Convert.ToByte(spl[0]), Convert.ToByte(spl[1]));
+                        Console.WriteLine("Time1(hours, minutes).ToString: " + time1.ToString());
+                        break;
+                    } else {
+                        Console.Out.WriteLine("Input Error.");
+                    }
+                } else {
+                    Console.Out.WriteLine("Input Error.");
+                }
+            }
 
-            Time t4 = new Time(12, 0);
-            Console.WriteLine((--t4).ToString());
+            Time time2 = new Time(time1);
+            Console.WriteLine("Time2(Time1).ToString: " + time2.ToString());
 
-            Time t5 = new Time(0, 0);
-            Console.WriteLine((--t5).ToString());
+            Time t11, t12;
+            while(true) {
+                Console.WriteLine("Input hours and minutes for Time11(hours, minutes) and for Time12(hours, minutes) for Time(12, 0) - Time(1, 22)).ToString: ");
+                inp = Console.ReadLine();
+                spl = inp.Split(' ');
+                if(spl.Length == 4) {
+                    if(check.isokinputbyte(spl[0], 0, 23) && check.isokinputbyte(spl[1], 0, 59) && check.isokinputbyte(spl[2], 0, 23) && check.isokinputbyte(spl[3], 0, 59)) {
+                        t11 = new Time(Convert.ToByte(spl[0]), Convert.ToByte(spl[1]));
+                        t12 = new Time(Convert.ToByte(spl[2]), Convert.ToByte(spl[3]));
+                        Console.WriteLine("(Time11(hours, minutes) - Time12(hours, minutes)).ToString: " + (t11 - t12).ToString());
+                        break;
+                    } else {
+                        Console.Out.WriteLine("Input Error.");
+                    }
+                } else {
+                    Console.Out.WriteLine("Input Error.");
+                }
+            }
 
-            Time t6 = new Time(12, 0);
-            byte a = 12;
-            Console.WriteLine((t6 + a).ToString());
+            Time t4;
+            while(true) {
+                Console.WriteLine("Input hours and minutes for Time4(hours, minutes) for (--Time4(hours, minutes)).ToString:");
+                inp = Console.ReadLine();
+                spl = inp.Split(' ');
+                if(spl.Length == 2) {
+                    if(check.isokinputbyte(spl[0], 0, 23) && check.isokinputbyte(spl[1], 0, 59)) {
+                        t4 = new Time(Convert.ToByte(spl[0]), Convert.ToByte(spl[1]));
+                        Console.WriteLine("(--Time4(hours, minutes)).ToString: " + (--t4).ToString());
+                        break;
+                    } else {
+                        Console.Out.WriteLine("Input Error.");
+                    }
+                } else {
+                    Console.Out.WriteLine("Input Error.");
+                }
+            }
 
-            Time t7 = new Time(1, 0);
-            byte b = 66;
-            Console.WriteLine((b + t7).ToString());
+            Time t6;
+            byte b;
+            while(true) {
+                Console.WriteLine("Input hours and minutes for Time6(hours, minutes) and b minutes for (Time6(hours, minutes) + b).ToString:");
+                inp = Console.ReadLine();
+                spl = inp.Split(' ');
+                if(spl.Length == 3) {
+                    if(check.isokinputbyte(spl[0], 0, 23) && check.isokinputbyte(spl[1], 0, 59) && check.isokinputbyte(spl[2],byte.MinValue,byte.MaxValue)) {
+                        t6 = new Time(Convert.ToByte(spl[0]), Convert.ToByte(spl[1]));
+                        b = Convert.ToByte(spl[2]);
+                        Console.WriteLine("(Time6(hours, minutes) + b).ToString: " + (t6+b).ToString());
+                        break;
+                    } else {
+                        Console.Out.WriteLine("Input Error.");
+                    }
+                } else {
+                    Console.Out.WriteLine("Input Error.");
+                }
+            }
 
-            Time t77 = new Time(1, 0);
-            byte bb = 126;
-            Console.WriteLine((bb + t77).ToString());
+            Time t7;
+            byte c;
+            while(true) {
+                Console.WriteLine("Input hours and minutes for Time7(hours, minutes) and c minutes for (c + Time6(hours, minutes)).ToString:");
+                inp = Console.ReadLine();
+                spl = inp.Split(' ');
+                if(spl.Length == 3) {
+                    if(check.isokinputbyte(spl[0], 0, 23) && check.isokinputbyte(spl[1], 0, 59) && check.isokinputbyte(spl[2], byte.MinValue, byte.MaxValue)) {
+                        t7 = new Time(Convert.ToByte(spl[0]), Convert.ToByte(spl[1]));
+                        c = Convert.ToByte(spl[2]);
+                        Console.WriteLine("(c + Time6(hours, minutes)+b).ToString: " + (c + t7).ToString());
+                        break;
+                    } else {
+                        Console.Out.WriteLine("Input Error.");
+                    }
+                } else {
+                    Console.Out.WriteLine("Input Error.");
+                }
+            }
 
-            Time t8 = new Time(13, 33);
-            Console.WriteLine(((byte)t8));
+            Time t15, t16;
+            while(true) {
+                Console.WriteLine("Input hours and minutes for Time15(hours, minutes) and Time16(hours, minutes) for Time15(hours, minutes) + Time16(hours, minutes)).ToString: ");
+                inp = Console.ReadLine();
+                spl = inp.Split(' ');
+                if(spl.Length == 4) {
+                    if(check.isokinputbyte(spl[0], 0, 23) && check.isokinputbyte(spl[1], 0, 59) && check.isokinputbyte(spl[2], 0, 23) && check.isokinputbyte(spl[3], 0, 59) ){
+                        t15 = new Time(Convert.ToByte(spl[0]), Convert.ToByte(spl[1]));
+                        t16 = new Time(Convert.ToByte(spl[2]), Convert.ToByte(spl[3]));
+                        Console.WriteLine("Time15(hours, minutes) + Time16(hours, minutes)).ToString: " + (t15 + t16).ToString());
+                        break;
+                    } else {
+                        Console.Out.WriteLine("Input Error.");
+                    }
+                } else {
+                    Console.Out.WriteLine("Input Error.");
+                }
+            }
 
-            Time t9 = new Time(13, 33);
-            Console.WriteLine(((bool)t9));
+            Time t8;
+            while(true) {
+                Console.WriteLine("Input hours and minutes for Time8(hours, minutes) for ((byte)Time8(hours, minutes))");
+                inp = Console.ReadLine();
+                spl = inp.Split(' ');
+                if(spl.Length == 2) {
+                    if(check.isokinputbyte(spl[0], 0, 23) && check.isokinputbyte(spl[1], 0, 59)) {
+                        t8 = new Time(Convert.ToByte(spl[0]), Convert.ToByte(spl[1]));
+                        Console.WriteLine("((byte)Time8(hours, minutes)): " + ((byte)t8));
+                        break;
+                    } else {
+                        Console.Out.WriteLine("Input Error.");
+                    }
+                } else {
+                    Console.Out.WriteLine("Input Error.");
+                }
+            }
 
-            Time t10 = new Time(0, 1);
-            Console.WriteLine(((bool)t10));
+            Time t9;
+            while(true) {
+                Console.WriteLine("Input hours and minutes for Time9(hours, minutes) for (Time9(hours, minutes)) == true)");
+                inp = Console.ReadLine();
+                spl = inp.Split(' ');
+                if(spl.Length == 2) {
+                    if(check.isokinputbyte(spl[0], 0, 23) && check.isokinputbyte(spl[1], 0, 59)) {
+                        t9 = new Time(Convert.ToByte(spl[0]), Convert.ToByte(spl[1]));
+                        Console.WriteLine("(Time9(hours, minutes)) == true): " + (t9 == true));
+                        break;
+                    } else {
+                        Console.Out.WriteLine("Input Error.");
+                    }
+                } else {
+                    Console.Out.WriteLine("Input Error.");
+                }
+            }
+
         }
     }
 }
+ы
